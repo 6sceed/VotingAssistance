@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Assistance System</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font import for a professional look */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc; /* Light background for accessibility */
+        }
+        .view-transition {
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <!-- Main Navigation/Header -->
+    <header class="bg-white shadow-md p-4 sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-extrabold text-blue-700 cursor-pointer" onclick="showView('home')">
+                <svg class="inline-block w-6 h-6 mr-2 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6m-3-10v3m-3-3h6m0 0l-4 4-4-4m-4 4h.01M7 16h.01M4 20h16a2 2 0 002-2V6a2 2 0 00-2-2H4a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                VoterAssist
+            </h1>
+            <nav>
+                <button 
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition duration-150 ease-in-out transform hover:scale-105"
+                    onclick="showView('login')">
+                    Login / Register
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex items-center justify-center p-4">
+
+        <!-- Home Page View (Initial View) -->
+        <div id="home-view" class="view-transition w-full max-w-4xl text-center p-6 md:p-12 bg-white rounded-xl shadow-2xl space-y-8" style="display: none;">
+            <!-- Hero Section -->
+            <div class="space-y-4">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight">
+                    Your Voice, Your Vote. Simplified.
+                </h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    The Voting Assistance System provides personalized, secure, and up-to-date information on elections, candidates, and polling locations. Make informed decisions with confidence.
+                </p>
+            </div>
+
+            <!-- Key Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+                <!-- Feature Card 1 -->
+                <div class="p-6 bg-blue-50 rounded-lg shadow-md border border-blue-200">
+                    <svg class="w-8 h-8 mx-auto text-blue-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.103A.996.996 0 0020 7v14a2 2 0 01-2 2H6a2 2 0 01-2-2V7c0-.255.087-.495.242-.697l2.884-3.845a2 2 0 011.664-.858h5.81a2 2 0 011.664.858l2.884 3.845z"></path></svg>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Secure Registration</h3>
+                    <p class="text-gray-500 text-sm">Verify your voter status and register for updates easily and securely.</p>
+                </div>
+                <!-- Feature Card 2 -->
+                <div class="p-6 bg-green-50 rounded-lg shadow-md border border-green-200">
+                    <svg class="w-8 h-8 mx-auto text-green-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Polling Timelines</h3>
+                    <p class="text-gray-500 text-sm">Access important election dates, deadlines, and polling hours in one place.</p>
+                </div>
+                <!-- Feature Card 3 -->
+                <div class="p-6 bg-yellow-50 rounded-lg shadow-md border border-yellow-200">
+                    <svg class="w-8 h-8 mx-auto text-yellow-600 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Find Your Polling Place</h3>
+                    <p class="text-gray-500 text-sm">Locate your nearest voting center using our interactive, easy-to-use map.</p>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <button 
+                class="mt-8 text-lg font-bold py-3 px-8 bg-blue-600 text-white rounded-full shadow-xl hover:bg-blue-700 transition duration-300 transform hover:scale-105"
+                onclick="showView('register')">
+                Register to Vote Now
+            </button>
+        </div>
+        
+        <!-- Login Page View -->
+        <div id="login-view" class="view-transition w-full max-w-sm p-8 bg-white rounded-xl shadow-2xl" style="display: none; transform: translateY(-20px); opacity: 0;">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Voter Login</h2>
+            
+            <form id="login-form" onsubmit="event.preventDefault(); handleLogin();" class="space-y-5">
+                <div>
+                    <label for="voter-id" class="block text-sm font-medium text-gray-700 mb-1">Voter ID or Email</label>
+                    <input 
+                        type="text" 
+                        id="voter-id" 
+                        required 
+                        placeholder="e.g., voter@example.com"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        required 
+                        placeholder="••••••••"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                </div>
+
+                <div id="login-message" class="text-center text-sm font-medium text-red-600 hidden"></div>
+                
+                <button 
+                    type="submit" 
+                    class="w-full py-3 bg-blue-600 text-white font-bold rounded-lg shadow-lg hover:bg-blue-700 transition duration-150 transform hover:scale-[1.01]">
+                    Sign In
+                </button>
+                
+                <p class="text-center text-sm text-gray-500 mt-4">
+                    Don't have an account? 
+                    <a href="#" class="text-blue-600 hover:text-blue-700 font-medium" onclick="showView('register')">Register Now</a>
+                </p>
+            </form>
+        </div>
+
+        <!-- Registration Page View (NEW) -->
+        <div id="register-view" class="view-transition w-full max-w-md p-8 bg-white rounded-xl shadow-2xl" style="display: none; transform: translateY(-20px); opacity: 0;">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Voter Registration</h2>
+            
+            <form id="register-form" onsubmit="event.preventDefault(); handleRegistration();" class="space-y-5">
+                <div>
+                    <label for="reg-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                    <input 
+                        type="text" 
+                        id="reg-name" 
+                        required 
+                        placeholder="Jane Doe"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                </div>
+
+                <div>
+                    <label for="reg-email" class="block text-sm font-medium text-gray-700 mb-1">Email (Used as Voter ID)</label>
+                    <input 
+                        type="email" 
+                        id="reg-email" 
+                        required 
+                        placeholder="your.email@gov.org"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                </div>
+                
+                <div>
+                    <label for="reg-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <input 
+                        type="password" 
+                        id="reg-password" 
+                        required 
+                        placeholder="••••••••"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                </div>
+
+                <div>
+                    <label for="reg-confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="reg-confirm-password" 
+                        required 
+                        placeholder="••••••••"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150">
+                </div>
+
+                <div id="register-message" class="text-center text-sm font-medium text-red-600 hidden"></div>
+                
+                <button 
+                    type="submit" 
+                    class="w-full py-3 bg-green-600 text-white font-bold rounded-lg shadow-lg hover:bg-green-700 transition duration-150 transform hover:scale-[1.01]">
+                    Create Account
+                </button>
+                
+                <p class="text-center text-sm text-gray-500 mt-4">
+                    Already registered? 
+                    <a href="#" class="text-blue-600 hover:text-blue-700 font-medium" onclick="showView('login')">Sign In Here</a>
+                </p>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-4">
+        <div class="max-w-7xl mx-auto text-center text-sm">
+            &copy; 2024 VoterAssist System. All rights reserved. | <a href="#" class="hover:underline text-blue-300">Privacy Policy</a>
+        </div>
+    </footer>
+
+    <script>
+        // Global state for views
+        const views = {
+            home: document.getElementById('home-view'),
+            login: document.getElementById('login-view'),
+            register: document.getElementById('register-view') // Added register view
+        };
+        const loginMessage = document.getElementById('login-message');
+        const registerMessage = document.getElementById('register-message');
+
+        /**
+         * Shows the requested view with a fading transition.
+         * @param {string} viewName - 'home', 'login', or 'register'
+         */
+        function showView(viewName) {
+            for (const name in views) {
+                const view = views[name];
+                if (name === viewName) {
+                    // Show target view
+                    view.style.display = 'block';
+                    setTimeout(() => {
+                        view.style.opacity = '1';
+                        view.style.transform = 'translateY(0)';
+                    }, 10); 
+                } else {
+                    // Hide other views
+                    view.style.opacity = '0';
+                    view.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        view.style.display = 'none';
+                    }, 300); 
+                }
+            }
+        }
+
+        /**
+         * Handles the simulated login process.
+         */
+        function handleLogin() {
+            const voterId = document.getElementById('voter-id').value.trim();
+            const password = document.getElementById('password').value;
+
+            // Clear previous message
+            loginMessage.textContent = '';
+            loginMessage.classList.remove('text-green-600', 'text-red-600');
+            loginMessage.classList.add('hidden');
+
+            if (voterId === "" || password === "") {
+                loginMessage.textContent = 'Please enter both Voter ID/Email and Password.';
+                loginMessage.classList.add('text-red-600');
+                loginMessage.classList.remove('hidden');
+                return;
+            }
+            
+            const loginButton = document.querySelector('#login-form button[type="submit"]');
+            const originalText = loginButton.textContent;
+            loginButton.textContent = 'Signing In...';
+            loginButton.disabled = true;
+
+            setTimeout(() => {
+                loginButton.textContent = originalText;
+                loginButton.disabled = false;
+
+                // Simple simulated success/failure logic
+                if (voterId === 'test@vote.org' && password === '12345') {
+                    // Success
+                    loginMessage.textContent = 'Login successful! Redirecting to dashboard...';
+                    loginMessage.classList.add('text-green-600');
+                    loginMessage.classList.remove('hidden');
+                    // In a real app, you would redirect here
+                } else {
+                    // Failure
+                    loginMessage.textContent = 'Invalid credentials. Please try again.';
+                    loginMessage.classList.add('text-red-600');
+                    loginMessage.classList.remove('hidden');
+                }
+            }, 1500); 
+        }
+
+        /**
+         * Handles the simulated registration process.
+         */
+        function handleRegistration() {
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+            // Clear previous message
+            registerMessage.textContent = '';
+            registerMessage.classList.remove('text-green-600', 'text-red-600');
+            registerMessage.classList.add('hidden');
+
+            if (name === "" || email === "" || password === "" || confirmPassword === "") {
+                registerMessage.textContent = 'All fields are required for registration.';
+                registerMessage.classList.add('text-red-600');
+                registerMessage.classList.remove('hidden');
+                return;
+            }
+
+            if (password.length < 5) {
+                registerMessage.textContent = 'Password must be at least 5 characters long.';
+                registerMessage.classList.add('text-red-600');
+                registerMessage.classList.remove('hidden');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                registerMessage.textContent = 'Passwords do not match.';
+                registerMessage.classList.add('text-red-600');
+                registerMessage.classList.remove('hidden');
+                return;
+            }
+            
+            const registerButton = document.querySelector('#register-form button[type="submit"]');
+            const originalText = registerButton.textContent;
+            registerButton.textContent = 'Registering...';
+            registerButton.disabled = true;
+
+            setTimeout(() => {
+                registerButton.textContent = originalText;
+                registerButton.disabled = false;
+
+                // Simulated successful registration
+                registerMessage.textContent = 'Registration successful! Please log in.';
+                registerMessage.classList.add('text-green-600');
+                registerMessage.classList.remove('hidden');
+                
+                // Automatically switch to the login view after a short delay
+                setTimeout(() => {
+                    showView('login');
+                }, 1000);
+            }, 2000); 
+        }
+
+
+        // Initialize the app by showing the home view
+        window.onload = () => {
+            showView('home');
+        };
+
+        // Fallback for custom alert simulation (since real alert() is disallowed)
+        window.alert = (message) => {
+            console.log("Custom Alert Message:", message);
+            // Simple visual feedback instead of a blocking alert
+            const alertDiv = document.createElement('div');
+            alertDiv.className = "fixed top-4 right-4 bg-yellow-500 text-white p-3 rounded-lg shadow-xl z-50 transition duration-300 transform translate-x-0";
+            alertDiv.textContent = message;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        };
+    </script>
+
+</body>
+</html> 
