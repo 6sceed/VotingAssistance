@@ -1,63 +1,57 @@
 <?php
-// Set content type to JSON for API response
-header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
 
-// --- ⚠️ DATABASE CONFIGURATION: UPDATE THESE VALUES ⚠️ ---
-$db_host = 'localhost';
-$db_name = 'voter_assist_db';
-$db_user = 'root';
-$db_pass = '';
-// ----------------------------------------------------
-
-$mysqli = new mysqli($db_host, $db_user, $db_pass, $db_name);
-
-// Check connection
-if ($mysqli->connect_error) {
-    echo json_encode(['success' => false, 'message' => 'Database connection failed.']);
-    exit();
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
 }
 
-// Get JSON input from the frontend
-$data = json_decode(file_get_contents('php://input'), true);
+header("Content-Type: application/json");
 
-$name = $data['name'] ?? '';
-$email = $data['email'] ?? '';
-$password = $data['password'] ?? '';
-$confirmPassword = $data['confirmPassword'] ?? '';
+// Get raw JSON input
+$input = json_decode(file_get_contents("php://input"), true);
 
-// Basic input validation
-if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
-    echo json_encode(['success' => false, 'message' => 'All fields are required.']);
-    exit();
-}
-if ($password !== $confirmPassword) {
-    echo json_encode(['success' => false, 'message' => 'Passwords do not match.']);
-    exit();
-}
-if (strlen($password) < 5) {
-    echo json_encode(['success' => false, 'message' => 'Password must be at least 5 characters long.']);
-    exit();
+$name = $input["name"] ?? "";
+$email = $input["email"] ?? "";
+$password = $input["password"] ?? "";
+
+// Quick validation
+if (empty($name) || empty($email) || empty($password)) {
+    echo json_encode(["status" => "error", "message" => "All fields are required."]);
+    exit;
 }
 
-// Hash the password securely using the recommended PHP function
-$password_hash = password_hash($password, PASSWORD_DEFAULT);
+// Connect to your DB
+$conn = new mysqli("localhost", "root", "", "voting_system");
+if ($conn->connect_error) {
+    echo json_encode(["status" => "error", "message" => "DB connection failed: " . $conn->connect_error]);
+    exit;
+}
 
-// Use prepared statement to prevent SQL injection
-$stmt = $mysqli->prepare("INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)");
-$stmt->bind_param("sss", $name, $email, $password_hash);
+// Check if email exists
+$stmt = $conn->prepare("SELECT * FROM voters WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    echo json_encode(["status" => "error", "message" => "Email already registered."]);
+    exit;
+}
+
+// Insert new user
+$hashed = password_hash($password, PASSWORD_DEFAULT);
+$stmt = $conn->prepare("INSERT INTO voters (name, email, password) VALUES (?, ?, ?)");
+$stmt->bind_param("sss", $name, $email, $hashed);
 
 if ($stmt->execute()) {
-    echo json_encode(['success' => true, 'message' => 'Registration successful! Please log in.']);
+    echo json_encode(["status" => "success", "message" => "Registration successful."]);
 } else {
-    // 1062 is the error code for duplicate entry (unique constraint violation on email)
-    if ($mysqli->errno === 1062) {
-        echo json_encode(['success' => false, 'message' => 'This email is already registered.']);
-    } else {
-        error_log("Registration DB Error: " . $mysqli->error);
-        echo json_encode(['success' => false, 'message' => 'Registration failed due to a database error.']);
-    }
+    echo json_encode(["status" => "error", "message" => "Registration failed: " . $stmt->error]);
 }
 
 $stmt->close();
-$mysqli->close();
+$conn->close();
 ?>
